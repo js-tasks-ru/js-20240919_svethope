@@ -5,14 +5,13 @@
  * @returns {string[]}
  */
 function sortStrings(arr, param = 'asc') {
-	arr.toLocaleString();
-	let collator = new Intl.Collator({ sensitivity: "variant" }, { caseFirst: "upper" });
+	const locales = ["ru-RU", "en-US"];
+	const options = { sensitivity: "variant", caseFirst: "upper" };
+	let collator = new Intl.Collator(locales, options);
 	arr.sort((a, b) => collator.compare(a, b));
 	if (param === 'desc') {
-		arr.reverse()
+		arr.reverse();
 	}
 	return (arr);
 }
-let arr = prompt("Massive, please: ").replace(/'/g, '"').split(', ');
-let param = prompt("Method of sort: ");
-alert(sortStrings(arr, param.toLocaleString()));
+
