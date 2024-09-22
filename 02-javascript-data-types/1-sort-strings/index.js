@@ -5,11 +5,11 @@
  * @returns {string[]}
  */
 export function sortStrings(arr, param = 'asc') {
-	let locales = ["ru", "en"];
-	let options = { sensitivity: "variant", caseFirst: "upper" };
-	let collator = new Intl.Collator(locales, options);
+	const locales = ["ru", "en"];
+	const options = { sensitivity: "variant", caseFirst: "upper" };
+	const collator = new Intl.Collator(locales, options);
 	let sortedArray = arr.slice();
 	sortedArray.sort((a, b) => collator.compare(a, b));
-	if (param === 'desc') { sortedArray.reverse(); }
+	if (param === 'desc') { sortedArray.sort((a, b) => collator.compare(b, a)); }
 	return (sortedArray);
 }
