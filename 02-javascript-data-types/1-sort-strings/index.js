@@ -8,8 +8,6 @@ export function sortStrings(arr, param = 'asc') {
 	const locales = ["ru", "en"];
 	const options = { sensitivity: "variant", caseFirst: "upper" };
 	const collator = new Intl.Collator(locales, options);
-	let sortedArray = arr.slice();
-	sortedArray.sort((a, b) => collator.compare(a, b));
-	if (param === 'desc') { sortedArray.sort((a, b) => collator.compare(b, a)); }
-	return (sortedArray);
+	const sortFn = param === 'desc' ? (a, b) => collator.compare(b, a) : (a, b) => collator.compare(a, b);
+	return arr.slice().sort(sortFn);
 }
