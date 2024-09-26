@@ -6,13 +6,13 @@
 export function createGetter(path, obj) {
 	const pathStr = path.split('.');
 
-	if (!pathStr.length) return undefined;
+	if (!pathStr.length) return;
 
 	return (obj) => {
 		let result = obj;
 
 		for (const pstr of pathStr) {
-			if (result[pstr] === undefined) return undefined;
+			if (result[pstr] === undefined) return;
 			if (result[pstr] === '') return null;
 			if (!result.hasOwnProperty(pstr)) return;
 

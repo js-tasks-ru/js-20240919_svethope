@@ -6,28 +6,25 @@
  */
 export function trimSymbols(string, size) {
 	let mass = [];
-	const letters = string.split('')
-	let i = 0;
-	let counter = 0;
+	const letters = string.split('');
+	let counter = 1;
 	let prevLetter = letters[0];
-
 	if (size === 0) return '';
 	if (!size) return string;
 
-	for (let letter of letters) {
-		if (prevLetter === letter) {
-			if (counter < size) {
+	for (let i = 1; i < letters.length; i++) {
+		if (prevLetter == letters[i]) {
+			if (counter >= size) {
+				letters[i] = '';
 				counter += 1;
-				mass[i] = letter;
-				i += 1;
+				continue;
 			}
 		}
 		else {
-			counter = 1;
-			prevLetter = letter;
-			mass[i] = letter;
-			i += 1;
+			counter = 0;
+			prevLetter = letters[i]
 		}
+		counter += 1;
 	}
-	return mass.join('');
+	return letters.join('');
 }
