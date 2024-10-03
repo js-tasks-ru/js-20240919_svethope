@@ -1,6 +1,7 @@
 export default class ColumnChart {
 	element;
 	chartHeight = 50;
+	data;
 
 	constructor ( props = {} ) {
 		const {
