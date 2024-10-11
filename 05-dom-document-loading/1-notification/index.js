@@ -13,36 +13,33 @@ export default class NotificationMessage {
 		this.type = type;
 
 		this.element = this.createElement();
+
 	}
 
 	createElement() {
-		const element = document.createElement('div');
+		const element = document.createElement("div");
 		element.innerHTML = this.createTemplate();
-		this.element = element.firstElementChild;
-		NotificationMessage.lastShown = this.element;
-		const firstElementChild = element.firstElementChild
-		const cls = this.type;
-		firstElementChild.classList.add(cls);
-		return firstElementChild;
+		return element.firstElementChild;
 	}
 
+	show(divb) {
+      if (NotificationMessage.lastShown) {
+        NotificationMessage.lastShown.remove();
+      }
 
-	show(container = document.body) {
-		container.append(this.element);
+      this.timerId = setTimeout(() => this.remove(), this.duration);
+      if (!divb) {divb = document.body;}
+      divb.append(this.element);
 
-			this.timerId = setTimeout(() => {
-				this.remove();
-			}, this.duration);
-
-			container.appendChild(this.element);
-	}
+      NotificationMessage.lastShown = this;
+    }
 
 	createTemplate() {
 		return `
-			<div class="notification" style="--value:20s">
+			<div class="notification ${this.type}" style="--value:20s">
 				<div class="timer"></div>
 				<div class="inner-wrapper">
-					<div class="notification-header">success</div>
+					<div class="notification-header">${this.type}</div>
 					<div class="notification-body">
 						${this.message}
 					</div>
@@ -53,16 +50,10 @@ export default class NotificationMessage {
 
 	destroy() {
 		this.remove();
-		this.element = null;
-
-		if (this.timerId) {
-			clearTimeout(this.timerId);
-		}
+		clearTimeout(this.timerId);
 	}
 
 	remove() {
-		if (this.element) {
-			this.element.remove();
-		}
+		this.element.remove();
 	}
 }

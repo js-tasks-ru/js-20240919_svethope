@@ -4,14 +4,16 @@ export default class SortableTable {
 
     this.headerConfig = headerConfig;
     this.data = data;
-    this.element = document.createElement('div');
-    this.createTree();
+    this.element = this.createElement();
+		this.subElements = this.getSubElements(this.element);
+
   }
 
-	createTree() {
-		this.element.className = "sortable-table";
-		this.element.innerHTML = this.createTemplate();
-		this.subElements = this.getSubElements(this.element);
+	createElement() {
+    const div = document.createElement("div");
+    div.innerHTML = this.createTemplate();
+
+    return div.firstElementChild;
 	}
 
 	getSubElements(element) {
@@ -21,7 +23,6 @@ export default class SortableTable {
 
 		for (const subElement of elements) {
 			const name = subElement.dataset.element;
-
 			arrSubElem[name] = subElement;
 		}
 
@@ -29,7 +30,7 @@ export default class SortableTable {
 	}
 
   createTemplate() {
-    return `
+    const tmpl = `
     <div data-element="header" class="sortable-table__header sortable-table__row">
       ${this.createHeader().join('')}
     </div>
@@ -47,6 +48,7 @@ export default class SortableTable {
         <button type="button" class="button-primary-outline">Reset all filters</button>
       </div>
     </div>`;
+		return tmpl;
   }
 
   createHeader() {
@@ -81,7 +83,8 @@ export default class SortableTable {
 
   sort(field, order) {
 
-    const sortingHeader = this.headerConfig.filter(conf => conf['id'] == field)[0];
+		const sortingHeader = this.headerConfig.filter(conf => conf['id'] == field)[0];
+
     let sortDesc, sortAsc;
 
     if (sortingHeader['sortType'] == 'string') {
@@ -104,13 +107,15 @@ export default class SortableTable {
       this.data = [...this.data].sort(sortDesc);
     } else if (order == 'asc') {
       this.data = [...this.data].sort(sortAsc);
-    }
-    this.createTree();
+		}
+
+		this.element.innerHTML = this.createTemplate();
+		this.subElements = this.getSubElements(this.element);
   }
 
   remove() {
 
-    if (this.element) {
+    if (this.element.firstElementChild) {
       this.element.remove();
     }
   }
