@@ -1,19 +1,20 @@
 export default class SortableTable {
+	element;
+	subElements;
 
   constructor(headerConfig = [], data = []) {
 
     this.headerConfig = headerConfig;
     this.data = data;
-    this.element = this.createElement();
+		this.element =	this.createElement();
 		this.subElements = this.getSubElements(this.element);
-
   }
 
 	createElement() {
     const div = document.createElement("div");
-    div.innerHTML = this.createTemplate();
+		div.innerHTML = this.createTemplate();
 
-    return div.firstElementChild;
+    return div;
 	}
 
 	getSubElements(element) {
@@ -25,7 +26,7 @@ export default class SortableTable {
 			const name = subElement.dataset.element;
 			arrSubElem[name] = subElement;
 		}
-
+		// console.log('subElements: ', arrSubElem);
 		return arrSubElem;
 	}
 
@@ -53,7 +54,7 @@ export default class SortableTable {
 
   createHeader() {
     return this.headerConfig.map(({id, title, sortable})=>`
-      <div class="sortable-table__cell" data-id="${id}}" data-sortable="${sortable}" data-order="">
+      <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" data-order="">
         <span>${title}</span>
       </div>`);
 
@@ -108,11 +109,13 @@ export default class SortableTable {
     } else if (order == 'asc') {
       this.data = [...this.data].sort(sortAsc);
 		}
-
+		this.update();
+  }
+	update() {
+		this.element.className = "sortable-table";
 		this.element.innerHTML = this.createTemplate();
 		this.subElements = this.getSubElements(this.element);
-  }
-
+	}
   remove() {
 
     if (this.element.firstElementChild) {
